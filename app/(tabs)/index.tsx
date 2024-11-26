@@ -1,11 +1,16 @@
-import ImageViewer from "@/components/ImageViewer";
-import { StyleSheet, View } from "react-native";
 import Button from "@/components/Button";
+import ImageViewer from "@/components/ImageViewer";
 import * as ImagePicker from "expo-image-picker";
+import { useState } from "react";
+import { StyleSheet, View } from "react-native";
 
 const PlaceholderImage = require("@/assets/images/background-image.png");
 
 export default function Index() {
+  const [selectedImage, setSelectedImage] = useState<string | undefined>(
+    undefined
+  );
+
   const pickImageAsync = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
@@ -13,9 +18,9 @@ export default function Index() {
       quality: 1,
     });
 
-    console.log(result);
-
-    if (result.canceled) {
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri);
+    } else {
       alert("You did not select any image.");
     }
   };
@@ -23,7 +28,10 @@ export default function Index() {
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
-        <ImageViewer imgSource={PlaceholderImage} />
+        <ImageViewer
+          imgSource={PlaceholderImage}
+          selectedImage={selectedImage}
+        />
       </View>
       <View style={styles.footerContainer}>
         <Button
