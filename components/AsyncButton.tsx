@@ -1,6 +1,13 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useState } from "react";
-import { Pressable, Text, StyleSheet } from "react-native";
+import {
+  Pressable,
+  Text,
+  StyleSheet,
+  type StyleProp,
+  TextStyle,
+  ViewStyle,
+} from "react-native";
 
 type Props = {
   onPress: () => Promise<void>;
@@ -9,6 +16,10 @@ type Props = {
 
 export default function AsyncButton({ onPress, label }: Props) {
   const [isWorking, setIsWorking] = useState(false);
+
+  const makeStyle = (css: any, disabledCss: any): any => {
+    return [css, isWorking ? disabledCss : {}];
+  };
 
   const handleOnPress = async () => {
     try {
@@ -21,7 +32,7 @@ export default function AsyncButton({ onPress, label }: Props) {
 
   return (
     <Pressable
-      style={[styles.button, isWorking ? { borderColor: "gray" } : {}]}
+      style={makeStyle(styles.button, { borderColor: "gray" })}
       onPress={handleOnPress}
       disabled={isWorking}
     >
