@@ -1,3 +1,4 @@
+import { api } from "@/utils/api";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useState } from "react";
 import { Text, View, StyleSheet, Pressable } from "react-native";
@@ -6,15 +7,20 @@ export default function AboutScreen() {
   const [message, setMessage] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
-  const onPress = () => {
+  const onPress = async () => {
     console.log("coucou");
     setErrorMsg("");
     if (message !== "") {
       setMessage("");
       return;
     }
-    setMessage("Coucou !!!");
-    setErrorMsg("oups!");
+    try {
+      const message = await api.getMessage();
+      setMessage(message);
+    } catch (err) {
+      console.log("err: ", err);
+      setErrorMsg("oups!");
+    }
   };
   return (
     <View style={styles.container}>
