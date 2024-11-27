@@ -1,17 +1,15 @@
+import AsyncButton from "@/components/AsyncButton";
 import { api } from "@/utils/api";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useState } from "react";
-import { Text, View, StyleSheet, Pressable } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 export default function AboutScreen() {
   const [message, setMessage] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
-  const [isWorking, setIsWorking] = useState(false);
 
   const onPress = async () => {
     try {
       console.log("coucou");
-      setIsWorking(true);
       setErrorMsg("");
       if (message !== "") {
         setMessage("");
@@ -27,26 +25,11 @@ export default function AboutScreen() {
       }
 
       setErrorMsg("oups!");
-    } finally {
-      setIsWorking(false);
     }
   };
   return (
     <View style={styles.container}>
-      <Pressable
-        style={[styles.button, isWorking ? { borderColor: "gray" } : {}]}
-        onPress={onPress}
-        disabled={isWorking}
-      >
-        <FontAwesome
-          name="heart"
-          size={18}
-          style={[styles.buttonIcon, isWorking ? { color: "gray" } : {}]}
-        />
-        <Text style={[styles.buttonLabel, isWorking ? { color: "gray" } : {}]}>
-          Clique moi
-        </Text>
-      </Pressable>
+      <AsyncButton onPress={onPress} label="Clique moi" />
       <Text style={[styles.message, { color: "red" }]}>{errorMsg}</Text>
       <Text style={styles.message}>{message}</Text>
     </View>
