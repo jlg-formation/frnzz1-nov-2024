@@ -6,17 +6,19 @@ import { Text, View, StyleSheet, Pressable } from "react-native";
 export default function AboutScreen() {
   const [message, setMessage] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [isWorking, setIsWorking] = useState(false);
 
   const onPress = async () => {
-    console.log("coucou");
-    setErrorMsg("");
-    if (message !== "") {
-      setMessage("");
-      return;
-    }
     try {
-      const message = await api.getMessage();
-      setMessage(message);
+      console.log("coucou");
+      setIsWorking(true);
+      setErrorMsg("");
+      if (message !== "") {
+        setMessage("");
+        return;
+      }
+      const msg = await api.getMessage();
+      setMessage(msg);
     } catch (err) {
       console.log("err: ", err);
       if (err instanceof Error) {
@@ -25,13 +27,25 @@ export default function AboutScreen() {
       }
 
       setErrorMsg("oups!");
+    } finally {
+      setIsWorking(false);
     }
   };
   return (
     <View style={styles.container}>
-      <Pressable style={styles.button} onPress={onPress}>
-        <FontAwesome name="heart" size={18} style={styles.buttonIcon} />
-        <Text style={styles.buttonLabel}>Clique moi</Text>
+      <Pressable
+        style={[styles.button, isWorking ? { borderColor: "gray" } : {}]}
+        onPress={onPress}
+        disabled={isWorking}
+      >
+        <FontAwesome
+          name="heart"
+          size={18}
+          style={[styles.buttonIcon, isWorking ? { color: "gray" } : {}]}
+        />
+        <Text style={[styles.buttonLabel, isWorking ? { color: "gray" } : {}]}>
+          Clique moi
+        </Text>
       </Pressable>
       <Text style={[styles.message, { color: "red" }]}>{errorMsg}</Text>
       <Text style={styles.message}>{message}</Text>
