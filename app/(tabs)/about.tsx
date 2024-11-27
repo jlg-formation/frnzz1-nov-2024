@@ -4,14 +4,17 @@ import { Text, View, StyleSheet, Pressable } from "react-native";
 
 export default function AboutScreen() {
   const [message, setMessage] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const onPress = () => {
     console.log("coucou");
+    setErrorMsg("");
     if (message !== "") {
       setMessage("");
       return;
     }
     setMessage("Coucou !!!");
+    setErrorMsg("oups!");
   };
   return (
     <View style={styles.container}>
@@ -19,6 +22,7 @@ export default function AboutScreen() {
         <FontAwesome name="heart" size={18} style={styles.buttonIcon} />
         <Text style={styles.buttonLabel}>Clique moi</Text>
       </Pressable>
+      <Text style={[styles.message, { color: "red" }]}>{errorMsg}</Text>
       <Text style={styles.message}>{message}</Text>
     </View>
   );
