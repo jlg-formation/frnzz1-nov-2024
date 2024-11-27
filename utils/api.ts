@@ -1,6 +1,10 @@
+const url = "https://api.github.com/users";
+
 class API {
   async getMessage(): Promise<string> {
-    throw new Error("Method not implemented.");
+    const response = await fetch(url);
+    const json = await response.json();
+    return json[0].login;
   }
 }
 

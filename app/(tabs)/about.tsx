@@ -19,6 +19,11 @@ export default function AboutScreen() {
       setMessage(message);
     } catch (err) {
       console.log("err: ", err);
+      if (err instanceof Error) {
+        setErrorMsg(err.message);
+        return;
+      }
+
       setErrorMsg("oups!");
     }
   };
